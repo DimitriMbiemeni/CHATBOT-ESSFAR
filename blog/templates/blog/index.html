@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{%static 'blog\style.css'%}"/>
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script-->
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>ESSFAR CHATBOT</h1>
+    <div>
+        <div id="chatbot">
+        <p class="botText"><span>Hi! I'm ESSFAR Bot.</span></p>
+        </div>
+        <div id="userInput">
+        <input id="textInput" type="text" name="msg" placeholder="Type your Message">
+        <input id="buttonInput" type="submit" value="Send">
+        </div>
+    </div>
+
+    <script>
+        function getBotResponse() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+        $("#textInput").val("");
+
+        $("#chatbot").append(userHtml);
+
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+        $.get("/blog/getResponse",{msg:rawText}).done(function(data) {
+        var botHtml = '<p class="botText"><span>' + data + '</span/></p>';
+        $("#chatbot").append(botHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+        });
+        }
+        $("#textInput").keypress(function(e) {
+        if(e.which == 13) {
+        getBotResponse();
+        }
+        });
+        $("#buttonInput").click(function() {
+        getBotResponse();
+        })
+        </script>
+</body>
+
+</html>
